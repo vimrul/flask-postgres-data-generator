@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Generator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <h2>PostgreSQL Connection</h2>
+    <input type="text" id="host" placeholder="Host">
+    <input type="text" id="port" placeholder="Port">
+    <input type="text" id="dbname" placeholder="Database Name">
+    <input type="text" id="user" placeholder="Username">
+    <input type="password" id="password" placeholder="Password">
+    <button onclick="connectDB()">Connect</button>
+
+    <h2>Data Generation</h2>
+    <button onclick="startGeneration()">Start Generating Data</button>
+    <button onclick="stopGeneration()">Stop Generating Data</button>
+
+    <h2>Recent Data</h2>
+    <button onclick="fetchData()">Refresh Data</button>
+    <div id="data-display"></div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
