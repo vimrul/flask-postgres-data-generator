@@ -14,6 +14,7 @@ generating = False
 def create_tables():
     """Creates necessary tables if they do not exist."""
     conn = psycopg2.connect(**db_config)
+    conn.autocommit = True  # Ensure transactions are committed immediately
     cur = conn.cursor()
     cur.execute("""
         CREATE TABLE IF NOT EXISTS customers (
@@ -37,37 +38,35 @@ def create_tables():
             order_date TIMESTAMP DEFAULT NOW()
         );
     """)
-    conn.commit()
     cur.close()
     conn.close()
 
 def generate_data():
-    """Generates fake customer, transaction, and order data at intervals."""
+    """Generates massive fake customer, transaction, and order data at rapid intervals."""
     global generating
     while generating:
         try:
             conn = psycopg2.connect(**db_config)
+            conn.autocommit = True  # Prevent implicit transactions
             cur = conn.cursor()
             
-            # Insert a fake customer record
-            cur.execute("INSERT INTO customers (name, email, phone) VALUES (%s, %s, %s) RETURNING id;", 
-                        (fake.name(), fake.email(), fake.phone_number()))
-            customer_id = cur.fetchone()[0]
+            # Generate 50 customers per batch
+            for _ in range(50):
+                cur.execute("INSERT INTO customers (name, email, phone) VALUES (%s, %s, %s) RETURNING id;", 
+                            (fake.name(), fake.email(), fake.phone_number()))
+                customer_id = cur.fetchone()[0]
 
-            # Insert a fake transaction linked to the customer
-            cur.execute("INSERT INTO transactions (customer_id, amount) VALUES (%s, %s);", 
-                        (customer_id, round(fake.random_number(digits=3), 2)))
+                # Generate multiple transactions and orders per customer
+                cur.execute("INSERT INTO transactions (customer_id, amount) VALUES (%s, %s);", 
+                            (customer_id, round(fake.random_number(digits=3), 2)))
+                cur.execute("INSERT INTO orders (customer_id, product_name, quantity) VALUES (%s, %s, %s);", 
+                            (customer_id, fake.word(), fake.random_int(min=1, max=10)))
             
-            # Insert a fake order linked to the customer
-            cur.execute("INSERT INTO orders (customer_id, product_name, quantity) VALUES (%s, %s, %s);", 
-                        (customer_id, fake.word(), fake.random_int(min=1, max=10)))
-            
-            conn.commit()
             cur.close()
             conn.close()
             
-            # Wait for 2 seconds before generating the next set of data
-            time.sleep(2)
+            # Reduce sleep time for faster generation
+            time.sleep(0.5)
         except Exception as e:
             print("Error generating data:", e)
 
@@ -98,7 +97,7 @@ def connect_db():
 
 @app.route('/start_generation', methods=['POST'])
 def start_generation():
-    """Start data generation in a background thread."""
+    """Start massive data generation in a background thread."""
     global generating
     if not generating:
         generating = True
@@ -114,21 +113,21 @@ def stop_generation():
 
 @app.route('/fetch_data', methods=['GET'])
 def fetch_data():
-    """Fetch and return the latest data from all tables."""
+    """Fetch and return the latest data from all tables for real-time updates."""
     try:
         conn = psycopg2.connect(**db_config)
         cur = conn.cursor()
         
-        # Retrieve the latest 10 customer records
-        cur.execute("SELECT * FROM customers ORDER BY created_at DESC LIMIT 10;")
+        # Retrieve the latest 20 customer records
+        cur.execute("SELECT * FROM customers ORDER BY created_at DESC LIMIT 20;")
         customers = cur.fetchall()
         
-        # Retrieve the latest 10 transaction records
-        cur.execute("SELECT * FROM transactions ORDER BY transaction_date DESC LIMIT 10;")
+        # Retrieve the latest 20 transaction records
+        cur.execute("SELECT * FROM transactions ORDER BY transaction_date DESC LIMIT 20;")
         transactions = cur.fetchall()
         
-        # Retrieve the latest 10 order records
-        cur.execute("SELECT * FROM orders ORDER BY order_date DESC LIMIT 10;")
+        # Retrieve the latest 20 order records
+        cur.execute("SELECT * FROM orders ORDER BY order_date DESC LIMIT 20;")
         orders = cur.fetchall()
         
         cur.close()

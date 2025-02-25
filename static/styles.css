@@ -1,4 +1,3 @@
-/* General Styling */
 body {
     font-family: 'Poppins', sans-serif;
     background-color: #f4f7f6;
@@ -10,9 +9,8 @@ body {
     justify-content: center;
 }
 
-/* Container */
 .container {
-    max-width: 600px;
+    max-width: 800px;
     background: white;
     padding: 20px;
     border-radius: 8px;
@@ -21,15 +19,13 @@ body {
     text-align: center;
 }
 
-/* Section Titles */
 h2 {
     color: #333;
     font-size: 20px;
     margin-bottom: 15px;
 }
 
-/* Input Fields */
-input {
+input, button {
     width: 100%;
     padding: 10px;
     margin: 10px 0;
@@ -37,40 +33,37 @@ input {
     border-radius: 5px;
 }
 
-/* Buttons */
 button {
-    width: 100%;
-    padding: 12px;
-    border: none;
-    border-radius: 5px;
+    cursor: pointer;
     background-color: #007BFF;
     color: white;
+    border: none;
+    padding: 10px;
     font-size: 16px;
-    cursor: pointer;
     transition: background 0.3s;
-    margin-top: 10px;
 }
 
 button:hover {
     background-color: #0056b3;
 }
 
-/* Data Display */
-#data-display {
-    margin-top: 20px;
-    padding: 10px;
-    border-radius: 5px;
-    background: #f9f9f9;
+table {
+    width: 100%;
+    margin-top: 10px;
+    border-collapse: collapse;
+}
+
+th, td {
     border: 1px solid #ddd;
+    padding: 8px;
     text-align: left;
 }
 
-h3 {
-    margin-top: 10px;
-    color: #333;
+th {
+    background-color: #007BFF;
+    color: white;
 }
 
-p {
-    font-size: 14px;
-    color: #666;
+tr:nth-child(even) {
+    background-color: #f2f2f2;
 }

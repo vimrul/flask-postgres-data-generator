@@ -12,9 +12,7 @@ function connectDB() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data)
     }).then(response => response.json())
-      .then(data => {
-          alert(data.status === "success" ? "Connected successfully!" : `Error: ${data.message}`);
-      });
+      .then(data => alert(data.status === "success" ? "Connected successfully!" : `Error: ${data.message}`));
 }
 
 function startGeneration() {
@@ -29,19 +27,31 @@ function stopGeneration() {
         .then(() => alert("Data generation stopped!"));
 }
 
+// Fetch data every 2 seconds
 function fetchData() {
     fetch("/fetch_data")
         .then(response => response.json())
         .then(data => {
-            let display = "<h3>Customers</h3>";
-            data.customers.forEach(c => display += `<p><strong>${c[1]}</strong> - ${c[2]} - ${c[3]}</p>`);
+            let customerHTML = "";
+            data.customers.forEach(c => {
+                customerHTML += `<tr><td>${c[1]}</td><td>${c[2]}</td><td>${c[3]}</td></tr>`;
+            });
 
-            display += "<h3>Transactions</h3>";
-            data.transactions.forEach(t => display += `<p>Customer ID: ${t[1]} - Amount: <strong>$${t[2]}</strong></p>`);
+            let transactionHTML = "";
+            data.transactions.forEach(t => {
+                transactionHTML += `<tr><td>${t[0]}</td><td>${t[1]}</td><td>$${t[2]}</td></tr>`;
+            });
 
-            display += "<h3>Orders</h3>";
-            data.orders.forEach(o => display += `<p>Customer ID: ${o[1]} - Product: <strong>${o[2]}</strong> - Quantity: ${o[3]}</p>`);
+            let orderHTML = "";
+            data.orders.forEach(o => {
+                orderHTML += `<tr><td>${o[0]}</td><td>${o[1]}</td><td>${o[2]}</td><td>${o[3]}</td></tr>`;
+            });
 
-            document.getElementById("data-display").innerHTML = display;
+            document.getElementById("customer-data").innerHTML = customerHTML;
+            document.getElementById("transaction-data").innerHTML = transactionHTML;
+            document.getElementById("order-data").innerHTML = orderHTML;
         });
 }
+
+// Auto-refresh data
+setInterval(fetchData, 2000);
