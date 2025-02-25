@@ -5,23 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Data Generator</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
 <body>
-    <h2>PostgreSQL Connection</h2>
-    <input type="text" id="host" placeholder="Host">
-    <input type="text" id="port" placeholder="Port">
-    <input type="text" id="dbname" placeholder="Database Name">
-    <input type="text" id="user" placeholder="Username">
-    <input type="password" id="password" placeholder="Password">
-    <button onclick="connectDB()">Connect</button>
 
-    <h2>Data Generation</h2>
-    <button onclick="startGeneration()">Start Generating Data</button>
-    <button onclick="stopGeneration()">Stop Generating Data</button>
+    <div class="container">
+        <h2>PostgreSQL Connection</h2>
+        <input type="text" id="host" placeholder="Host">
+        <input type="text" id="port" placeholder="Port">
+        <input type="text" id="dbname" placeholder="Database Name">
+        <input type="text" id="user" placeholder="Username">
+        <input type="password" id="password" placeholder="Password">
+        <button onclick="connectDB()">Connect</button>
+    </div>
 
-    <h2>Recent Data</h2>
-    <button onclick="fetchData()">Refresh Data</button>
-    <div id="data-display"></div>
+    <div class="container">
+        <h2>Data Generation</h2>
+        <button onclick="startGeneration()">Start Generating Data</button>
+        <button onclick="stopGeneration()">Stop Generating Data</button>
+    </div>
+
+    <div class="container">
+        <h2>Recent Data</h2>
+        <button onclick="fetchData()">Refresh Data</button>
+        <div id="data-display"></div>
+    </div>
 
     <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>

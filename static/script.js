@@ -12,19 +12,21 @@ function connectDB() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data)
     }).then(response => response.json())
-      .then(data => alert(data.status === "success" ? "Connected successfully!" : `Error: ${data.message}`));
+      .then(data => {
+          alert(data.status === "success" ? "Connected successfully!" : `Error: ${data.message}`);
+      });
 }
 
 function startGeneration() {
     fetch("/start_generation", { method: "POST" })
         .then(response => response.json())
-        .then(data => alert("Data generation started!"));
+        .then(() => alert("Data generation started!"));
 }
 
 function stopGeneration() {
     fetch("/stop_generation", { method: "POST" })
         .then(response => response.json())
-        .then(data => alert("Data generation stopped!"));
+        .then(() => alert("Data generation stopped!"));
 }
 
 function fetchData() {
@@ -32,13 +34,13 @@ function fetchData() {
         .then(response => response.json())
         .then(data => {
             let display = "<h3>Customers</h3>";
-            data.customers.forEach(c => display += `<p>${c[1]} - ${c[2]} - ${c[3]}</p>`);
+            data.customers.forEach(c => display += `<p><strong>${c[1]}</strong> - ${c[2]} - ${c[3]}</p>`);
 
             display += "<h3>Transactions</h3>";
-            data.transactions.forEach(t => display += `<p>Customer ID: ${t[1]} - Amount: ${t[2]}</p>`);
+            data.transactions.forEach(t => display += `<p>Customer ID: ${t[1]} - Amount: <strong>$${t[2]}</strong></p>`);
 
             display += "<h3>Orders</h3>";
-            data.orders.forEach(o => display += `<p>Customer ID: ${o[1]} - Product: ${o[2]} - Quantity: ${o[3]}</p>`);
+            data.orders.forEach(o => display += `<p>Customer ID: ${o[1]} - Product: <strong>${o[2]}</strong> - Quantity: ${o[3]}</p>`);
 
             document.getElementById("data-display").innerHTML = display;
         });
